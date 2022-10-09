@@ -1,41 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Product } from './components/Product';
-import axios, {AxiosError} from 'axios'
-import { IProduct } from './models';
-
-
+import {Route, Routes} from 'react-router-dom'
+import {ProductsPage} from './pages/ProductsPage'
+import {AboutPage} from './pages/AboutPage'
+import {Navigation} from './components/Navigation'
 
 function App() {
-const [products, setProducts]= useState<IProduct[]>([])
-const [loading, setLoadind] = useState(false)
-const [error, setError] = useState('')
-
-async function fetchProducts() {
-  try {
-    setError('')
-    setLoadind(true)
-    const response = await axios.get<IProduct[]>('https://fakestoreapi.com/products?limit=7')
-    setProducts(response.data)
-    setLoadind(false)
-  } catch (e: unknown) {
-    const error = e as AxiosError;
-    
-    setLoadind(false)
-    setError(error.message)
-  }
-}
-
-  useEffect(() =>{
-    fetchProducts()
-  }, [])
-
   return (
-    <div className="container mx-auto max-w-2xl pt-5">
-      {loading && <p className='text-center'>Loading...</p>}
-      {error && <p className='text-center text-red-600'>{error}</p>}
-      {products.map(product => <Product product={product} key={product.id}/>)}
-    </div>
-  );
+    <>
+      <Navigation />
+      <Routes>
+        <Route path="/" element={ <ProductsPage /> } />
+        <Route path="/about" element={ <AboutPage /> } />
+      </Routes>
+    </>
+  )
 }
 
 export default App;
